@@ -12,6 +12,16 @@ public class LocalShow {
         this.dificuldade = dificuldade;
     }
 
+    @Override
+    public String toString() {
+        return "LocalShow{" +
+                "nome='" + nome + '\'' +
+                ", famaNecessaria=" + famaNecessaria +
+                ", recompensaBase=" + recompensaBase +
+                ", dificuldade=" + dificuldade +
+                '}';
+    }
+
     public String getNome() {
         return nome;
     }

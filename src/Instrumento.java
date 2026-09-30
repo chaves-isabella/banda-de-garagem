@@ -10,6 +10,15 @@ public class Instrumento {
         this.nivelQualidade = nivelQualidade;
     }
 
+    @Override
+    public String toString() {
+        return "Instrumento{" +
+                "nome='" + nome + '\'' +
+                ", valor=" + valor +
+                ", nivelQualidade=" + nivelQualidade +
+                '}';
+    }
+
     public String getNome() {
         return nome;
     }

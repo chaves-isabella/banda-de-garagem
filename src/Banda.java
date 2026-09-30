@@ -14,6 +14,16 @@ public class Banda {
         this.artistas = artistas;
     }
 
+    @Override
+    public String toString() {
+        return "Banda{" +
+                "nome='" + nome + '\'' +
+                ", nivel=" + nivel +
+                ", saldo=" + saldo +
+                ", artistas=" + artistas +
+                '}';
+    }
+
     public String getNome() {
         return nome;
     }
