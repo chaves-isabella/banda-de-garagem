@@ -69,16 +69,20 @@ public abstract class Artista {
         this.instrumento = instrumento;
     }
 
+    public int getBonusInstrumento() {
+        if (instrumento != null) {
+            return instrumento.getNivelQualidade();
+        }
+        return 0;
+    }
 
     public int tocar () {
         if (energia < 10){
             IO.println(getNome() + " você está exausto e não consegue realizar o show, descanse!");
             return 0;
         }
-        int bonus = 0;
-        if (getInstrumento() != null){
-            bonus = getInstrumento().getNivelQualidade();
-        }
+        int bonus = getBonusInstrumento();
+
         setEnergia(getEnergia() - 10);
         return getHabilidade() + bonus;
     }

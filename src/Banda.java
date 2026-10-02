@@ -10,7 +10,7 @@ public class Banda {
 
     public Banda(String nomeDaBanda) {
         this.nomeDaBanda = nomeDaBanda;
-        this.nivel = 1;
+        this.nivel = 0;
         this.saldo = 0.0;
         this.listaArtistas = new ArrayList<>();
     }
@@ -99,7 +99,7 @@ public class Banda {
         }
 
         public void adicionarSaldo (double valor){
-            if (valor < 0){
+            if (valor > 0){
                 saldo += valor;
             }
         }

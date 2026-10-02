@@ -6,12 +6,20 @@ void main() {
     criarLocais();
     criarBanda();
     menu();
-    descansar();
-    irALoja();
-    println("Até a proxima");
+    println("Até a próxima!");
+}
+private static int lerInteiro(String mensagem) {
+    try {
+        return Integer.parseInt(readln(mensagem).trim());
+    } catch (NumberFormatException e) {
+        println("Digite apenas números.");
+        return -1;
+    }
 }
 
 private static void criarLocais(){
+
+    locaisShows.add(new LocalShow("Garagem de casa", 0, 50.0, 1));
     locaisShows.add(new LocalShow("Bar do Zé", 1, 100.0, 10));
     locaisShows.add(new LocalShow("Rock Club", 2, 300.0, 30));
     locaisShows.add(new LocalShow("Teatro Municipal", 3, 600.0, 50));
@@ -29,28 +37,36 @@ private static void criarBanda (){
         int habilidade = 5;
         switch (i) {
             case 0 -> {
-                println("Vocalista adicionado");
-                banda.adicionarArtista(new Vocalista(nome, bio, habilidade));
+                Vocalista v = new Vocalista(nome, bio, habilidade);
+                v.setInstrumento(new Instrumento("Microfone Genérico", 0.0, 5));
+                banda.adicionarArtista(v);
+                println("Vocalista adicionado com Microfone Genérico!");
             }
             case 1 -> {
-                println("Guitarrista adicionado");
-                banda.adicionarArtista(new Guitarrista(nome, bio, habilidade));
+                Guitarrista g = new Guitarrista(nome, bio, habilidade);
+                g.setInstrumento(new Instrumento("Guitarra de Garagem", 0.0, 5));
+                banda.adicionarArtista(g);
+                println("Guitarrista adicionado com Guitarra de Garagem!");
             }
             case 2 -> {
-                println("Baixista adicionado");
-                banda.adicionarArtista(new Baixista(nome, bio, habilidade));
+                Baixista b = new Baixista(nome, bio, habilidade);
+                b.setInstrumento(new Instrumento("Baixo Escolar", 0.0, 5));
+                banda.adicionarArtista(b);
+                println("Baixista adicionado com Baixo Escolar!");
             }
             case 3 -> {
-                println("Baterista adicionado");
-                banda.adicionarArtista(new Baterista(nome, bio, habilidade));
+                Baterista bat = new Baterista(nome, bio, habilidade);
+                bat.setInstrumento(new Instrumento("Bateria Usada", 0.0, 5));
+                banda.adicionarArtista(bat);
+                println("Baterista adicionado com Bateria Usada!");
             }
         }
     }
 }
 private static void verStatus() {
-    println("Banda: " + banda.getNomeDaBanda() + " | Nível: " + banda.getNivel() + " | Saldo: R$ " + banda.getSaldo());
     for (Artista a : banda.getListaArtistas()) {
-        println(a + " | Energia: " + a.getEnergia());
+        println(a + " | Energia: " + a.getEnergia() + " | Habilidade: " + a.getHabilidade());
+        println("   Bio: " + a.getBiografia());
     }
 }
 private static void menu(){
@@ -58,11 +74,11 @@ private static void menu(){
     while (opcao != 5){
         println("\n=== MENU ===");
         println("1 - Ver status");
-        println("2 - Ensaiar");
+        println("2 - Loja");
         println("3 - Fazer show");
         println("4 - Descansar");
-        println("0 - Sair");
-        opcao = Integer.parseInt(readln("Escolha: "));
+        println("5 - Sair");
+        opcao = lerInteiro("Escolha: ");
 
         if (opcao == 1) {
             verStatus();
@@ -72,6 +88,8 @@ private static void menu(){
             fazerShow();
         } else if (opcao == 4) {
             descansar();
+        }else if (opcao != 5) {
+            println("Opção inválida.");
         }
     }
 }
@@ -85,13 +103,7 @@ private static void fazerShow() {
         println((i + 1) + ") " + locaisShows.get(i));
     }
 
-    int escolha;
-    try {
-        escolha = Integer.parseInt(readln("Onde tocar? (0 para voltar): "));
-    } catch (NumberFormatException e) {
-        println("Digite apenas números.");
-        return;
-    }
+    int escolha = lerInteiro("Onde tocar? (0 para voltar): ");
 
     if (escolha == 0) {
         return;
@@ -101,7 +113,6 @@ private static void fazerShow() {
         println("Opção inválida.");
         return;
     }
-
     LocalShow local = locaisShows.get(escolha - 1);
 
     if (!local.isBandaElegivel(banda)) {
@@ -109,14 +120,37 @@ private static void fazerShow() {
         return;
     }
 
-    int pontos = banda.calcularPontuacaoDoShow();
+
+    int pontos = 0;
+    for (Artista artista : banda.getListaArtistas()) {
+        println("\n" + artista + " | Energia: " + artista.getEnergia());
+        int op = lerInteiro("Habilidade (1 = básica, 2 = forte, 0 = tocar normal): ");
+
+        if (op == 1 || op == 2) {
+            int ganho = artista.habilidadeEspecial(op);
+            if (ganho > 0) {
+                ganho += artista.getBonusInstrumento();
+            }
+            pontos += ganho;
+        } else {
+            pontos += artista.tocar();
+        }
+    }
+
     double cache = local.calcularCache(pontos);
     banda.adicionarSaldo(cache);
     println("Pontos: " + pontos + " | Cachê: R$ " + cache);
 
     if (pontos >= local.getDificuldade()) {
-        banda.setNivel(banda.getNivel() + 1);
-        println("Show de sucesso! A banda agora é nível " + banda.getNivel());
+        if (local.getFamaNecessaria() >= banda.getNivel()) {
+            banda.setNivel(banda.getNivel() + 1);
+            for (Artista a : banda.getListaArtistas()) {
+                a.setHabilidade(a.getHabilidade() + 1);
+            }
+            println("Show de sucesso! A banda agora é nível " + banda.getNivel() + " e todos ficaram mais habilidosos!");
+        } else {
+            println("Show de sucesso, mas esse palco já ficou pequeno para vocês.");
+        }
     } else {
         println("O show não empolgou.");
     }
@@ -133,12 +167,20 @@ private static void irALoja() {
     if (item == 0) {
         return;
     }
+    if (item < 1 || item > estoque.size()) {
+        println("Opção inválida.");
+        return;
+    }
 
     for (int i = 0; i < artistas.size(); i++) {
         println((i + 1) + ") " + artistas.get(i));
     }
     int pessoa = Integer.parseInt(readln("Para quem? (0 para voltar): "));
     if (pessoa == 0) {
+        return;
+    }
+    if (pessoa < 1 || pessoa > artistas.size()) {
+        println("Opção inválida.");
         return;
     }
 

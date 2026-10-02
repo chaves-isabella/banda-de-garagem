@@ -38,4 +38,6 @@ public class Instrumento {
     public void setNivelQualidade(int nivelQualidade) {
         this.nivelQualidade = nivelQualidade;
     }
+
+
 }

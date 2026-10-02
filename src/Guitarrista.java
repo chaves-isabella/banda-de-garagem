@@ -17,9 +17,10 @@ public class Guitarrista extends Artista{
     }
 
     public int quebrarGuitarra () {
-        if (getEnergia() >= 35){
+        if (getEnergia() >= 35) {
             setEnergia(getEnergia() - 35);
-            IO.println(getNome() + " QUEBROU A GUITARRA! A plateia foi a loucura!");
+            IO.println(getNome() + " QUEBROU A GUITARRA! A plateia foi à loucura!");
+            setInstrumento(null);
             return getHabilidade() * 5;
         }
         else {
