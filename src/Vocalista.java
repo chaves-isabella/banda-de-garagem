@@ -1,12 +1,11 @@
 public class Vocalista extends Artista{
-
     public Vocalista(String nome, String biografia, int habilidade) {
         super(nome, biografia, habilidade);
     }
 
     public int agitarPlateia (){
-        if (getEnergia() >= 10){
-            setEnergia(getEnergia() - 10);
+        if (getEnergia() >= 15){
+            setEnergia(getEnergia() - 15);
             IO.println(getNome() + " gritou: 'VOCÊS ESTÃO PRONTO?!' e a plateia foi a loucura!");
             return getHabilidade() * 2;
         }

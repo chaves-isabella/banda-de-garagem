@@ -1,30 +1,26 @@
 public class Instrumento {
 
-    private String nome;
+    private String nomeInstrumento;
     private double valor;
     private int nivelQualidade;
 
     public Instrumento(String nome, double valor, int nivelQualidade) {
-        this.nome = nome;
+        this.nomeInstrumento = nome;
         this.valor = valor;
         this.nivelQualidade = nivelQualidade;
     }
 
     @Override
     public String toString() {
-        return "Instrumento{" +
-                "nome='" + nome + '\'' +
-                ", valor=" + valor +
-                ", nivelQualidade=" + nivelQualidade +
-                '}';
+        return nomeInstrumento + " (Bônus de Qualidade: +" + nivelQualidade + ") - R$ " + valor;
     }
 
     public String getNome() {
-        return nome;
+        return nomeInstrumento;
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        this.nomeInstrumento = nome;
     }
 
     public double getValor() {

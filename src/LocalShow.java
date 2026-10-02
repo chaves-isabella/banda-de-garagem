@@ -1,4 +1,5 @@
 public class LocalShow {
+    private static final double TETO_DESEMPENHO = 2.0;
 
     private String nome;
     private int famaNecessaria;
@@ -14,12 +15,9 @@ public class LocalShow {
 
     @Override
     public String toString() {
-        return "LocalShow{" +
-                "nome='" + nome + '\'' +
-                ", famaNecessaria=" + famaNecessaria +
-                ", recompensaBase=" + recompensaBase +
-                ", dificuldade=" + dificuldade +
-                '}';
+        return nome + " | Fama Exigida: " + famaNecessaria +
+                " | Cachê Base: R$ " + recompensaBase +
+                " | Dificuldade: " + dificuldade;
     }
 
     public String getNome() {
@@ -52,5 +50,19 @@ public class LocalShow {
 
     public void setDificuldade(int dificuldade) {
         this.dificuldade = dificuldade;
+    }
+
+    public boolean isBandaElegivel(Banda banda) {
+        if (banda == null) return false;
+        return banda.getNivel() >= this.famaNecessaria;
+    }
+
+    public double calcularCache (int pontuacaoTotal){
+        if (pontuacaoTotal <= 0){
+            return 0;
+        }
+        double desempenho = (double) pontuacaoTotal / dificuldade;
+        desempenho = Math.min(desempenho, TETO_DESEMPENHO);
+        return recompensaBase * desempenho;
     }
 }

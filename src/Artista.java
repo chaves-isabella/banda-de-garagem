@@ -13,6 +13,14 @@ public abstract class Artista {
         this.energia = 100;
         this.instrumento = null;
     }
+    @Override
+    public String toString() {
+        if (instrumento != null) {
+            return getClass().getSimpleName() + ": " + nome + " (" + instrumento.getNome() + ")";
+        } else {
+            return getClass().getSimpleName() + ": " + nome + " (Sem instrumento)";
+        }
+    }
 
     public String getNome() {
         return nome;
@@ -43,41 +51,40 @@ public abstract class Artista {
     }
 
     public void setEnergia(int energia) {
-        this.energia = energia;
+        if (energia > 100) {
+            this.energia = 100;
+        } else if (energia < 0) {
+            this.energia = 0;
+        }
+        else {
+            this.energia = energia;
+        }
     }
 
     public Instrumento getInstrumento() {
         return instrumento;
     }
 
-    public void setInstrumentoEquipado(Instrumento instrumento) {
+    public void setInstrumento(Instrumento instrumento) {
         this.instrumento = instrumento;
     }
 
-    public void equiparInstrumento (Instrumento instrumento){
-        this.instrumento = instrumento;
-        IO.println(getNome() + "equipou o instrumento" + instrumento.getNome());
-    }
 
     public int tocar () {
         if (energia < 10){
-            IO.println(getNome() + "você está exausto e não consegue realizar o show, descanse!");
+            IO.println(getNome() + " você está exausto e não consegue realizar o show, descanse!");
             return 0;
         }
-
         int bonus = 0;
         if (getInstrumento() != null){
             bonus = getInstrumento().getNivelQualidade();
         }
-        energia = getEnergia() - 10;
-        if (energia < 0) {
-            energia = 0;
-        }
-        return habilidade + bonus;
+        setEnergia(getEnergia() - 10);
+        return getHabilidade() + bonus;
     }
 
     public void descansar () {
-        energia = 100;
+        this.energia = 100;
         IO.println(getNome() + " você descansou, sua energia está " + getEnergia());
     }
 
